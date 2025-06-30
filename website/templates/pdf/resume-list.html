@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Resumes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .center-div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px; /* Adjust as needed */
+            margin: 20px 0;
+        }
+
+        /* Or if you want the button centered on the entire page */
+        .full-page-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh; /* 80% of viewport height */
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .resume-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .resume-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin: 15px 0;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .resume-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .resume-item span {
+            font-size: 18px;
+            font-weight: 500;
+            color: #34495e;
+        }
+        .download-button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            min-width: 120px;
+        }
+        .download-button:hover {
+            background-color: #2980b9;
+            text-decoration: none;
+        }
+        .empty-message {
+            text-align: center;
+            font-size: 18px;
+            color: #7f8c8d;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        /* Added for better button visibility */
+        .download-button:focus {
+            outline: 2px solid #2c3e50;
+            outline-offset: 2px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .resume-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .download-button {
+                align-self: flex-end;
+            }
+        }
+
+        /* Style for the logout button */
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .logout-button:hover {
+            background-color: #c0392b;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Logout Button -->
+    <form method="POST" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+
+    <div class="container">
+        <h1>Your Resumes</h1>
+
+        <ul class="resume-list">
+            {% for resume in resumes %}
+                <li class="resume-item">
+                    <span>CV for {{ resume.full_name }}</span>
+                    <a href="{% url 'pdf:resume-detail' resume.pk %}" class="download-button">Download PDF</a>
+                </li>
+            {% empty %}
+                <p class="empty-message">You have no resumes.</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="parent">
+        <div class="center-div">
+            <a href="{% url 'pdf:resume-create' %}" class="download-button">Create Resume</a>
+        </div>
+    </div>
+
+</body>
+</html>
